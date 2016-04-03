@@ -1,0 +1,60 @@
+#myFormDiv {	
+	background-color:rgba(50,50,50,0.25);
+	width: 70%;
+	padding: 1em 0em 0em 0em;
+	margin: 0 auto;
+	border-radius: 0.25em;
+}
+
+body{
+	background-image: url("Images/bg.png"); 
+    background-position: center;
+    width: 100%;
+    height: 100%;
+}
+
+#divCarousel {
+    background-color:rgba(50,50,50,0.25);
+    width: 70%;
+	padding: 0em 0em 0em 0em;
+	margin: 0 auto;
+	border-radius: 0.25em;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+  background-color: #F3DEDB;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #F9F9F9;
+}
+
+.WhiteText {
+    color: white; font-size:0.9em;
+}
+
+.RedText {
+    color:red;
+}
+
+.Lesspadding {padding-left:1em; padding-right:1em; margin:0;}
+
+.form-control::-webkit-input-placeholder { font-size: 0.9em; }
+.form-control:-moz-placeholder { font-size: 0.9em; }
+.form-control::-moz-placeholder { font-size: 0.9em; }
+.form-control:-ms-input-placeholder { font-size: 0.9em; }
+
+.nopadding {
+   padding: 0 !important;
+   margin: 0 !important;
+}
+
+.error-message{
+	color:red;
+	font-size:1.0em;
+}
+
+.table_hour>th { 
+    background-color: #337ab7;
+    color: white;
+}
+

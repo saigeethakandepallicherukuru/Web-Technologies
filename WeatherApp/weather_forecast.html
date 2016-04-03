@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Weather Forecast</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+    <script type="text/javascript" src="weather_forecast.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="formController">
+    <h2 align="center">Weather Forecast</h2>
+    <div id="myFormDiv" class="container row">
+        <form id="myForm" name="myForm">
+                <div class="col-xs-6 Lesspadding"><span class="white-text">City:</span><span class="RedText">*</span><br/>
+				    <input class="form-control" type="text" id="City_Name" name="CityName" ng-model="user.CityName" autocomplete="on" placeholder="Enter the City Name" required />
+                    <span ng-show="myForm.CityName.$touched && myForm.CityName.$invalid" class="error-message nopadding">The city name is required!</span>
+				</div>
+			     <div class="col-xs-6" align="right"><br/>
+				<button type="button" id="submitButton" class="btn btn-primary" ng-click="submit()">
+					<span class="glyphicon glyphicon-search" aria-hidden="true"></span> Search
+				</button>
+				<button type="button" id="clearButton" class="btn btn-default" ng-click="reset()">
+					<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Clear
+				</button>
+                <br/>
+				<div>
+				<span class="white-text">Powered by:</span><a href="http://openweathermap.org/" target="_blank"><img style="display:inline;" class="img-responsive nopadding" src="Images/logo_OpenWeatherMap_orange_website.png" alt="openweathermap.org" width="100em" height="50em"></a>
+				</div>
+				</div>
+        </form>
+    </div>
+    <div id="divCarousel" ng-show="showMe">
+        <div class="content container">
+            <div class="row">
+                <h4 style="color: white;">{{City+", "+Country}}</h4>
+                <b style="color: white;">{{date | date:'EEE'}}</b><br />
+                <b style="color: white;">{{myData[0].weather[0].description | capitalize}}</b>
+                <img ng-src="http://openweathermap.org/img/w/{{myData[0].weather[0].icon}}.png" alt="NA" width=45 height=45 class="img-responsive">  
+                <div class="col-xs-12">
+                    <div class="carousel" id="featured">
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <div class="table-responsive"> 
+                                    <table class="table table-striped" style="width: 70%;">
+                                    <thead>
+                                    <tr>
+                                    <th><a ng-href="http://maps.google.com/maps?q=+{{latitude}},{{longitude}}" target="_blank" class="btn btn-primary">
+                                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> Map
+                                        </a></th>
+                                    <th ng-repeat="x in myData"><mydate>{{x.dt * 1000 | date:'EEE'}}</mydate><br /><mydate>{{x.dt * 1000 | date:'MM-dd-yyyy'}}</mydate></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                    <td>Weather Condition</td>
+                                    <td ng-repeat="x in myData">{{x.weather[0].description}}<img ng-src="http://openweathermap.org/img/w/{{x.weather[0].icon}}.png" alt="NA" width=45 height=45 /></td>
+                                    </tr>
+                                    <tr>
+                                    <td>Temperature</td>
+                                    <td ng-repeat="x in myData">{{x.temp.day+"&deg;C"}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Pressure</td>
+                                    <td ng-repeat="x in myData">{{x.pressure+" hPa"}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Wind Speed</td>
+                                    <td ng-repeat="x in myData">{{x.speed+" m/sec"}}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>Humidity</td>
+                                    <td ng-repeat="x in myData">{{x.humidity+"%"}}</td>
+                                    </tr>
+                                    </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
