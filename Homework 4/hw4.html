@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HW4</title>
+</head>
+<body>
+    <script>
+        function loadXMLDoc() {
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.open("GET",document.getElementById("url").value, true);
+            xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4) {
+                if(xmlhttp.status == 200) {
+                    myFunction(xmlhttp);    
+                } else {
+                    alert("XML file does not exist!");    
+                }   
+            } 
+        };
+        xmlhttp.send(null);
+        }
+
+        function myFunction(xml) {
+            var x, i, j, xmlDoc, txt,xmlData, header, content, list, xlen, y, count,parser;
+            parser = new DOMParser();
+            xmlDoc = parser.parseFromString(xml.responseText,"text/xml");
+            txt = "";
+            txt = document.getElementById("url").value;
+  
+            if(txt) {
+                xmlData = "";
+                header = xmlDoc.documentElement.getElementsByTagName("Data");
+                xmlData += "<table border=\"1\"><tr>";
+                for(i = 0; i< header.length; i++) {
+                    if(header[i].childNodes.length==0) {
+                            xmlData += "<th style=\"white-space: nowrap\"> </th>";
+                    } else {
+                        xmlData += "<th style=\"white-space: nowrap\">"+header[i].childNodes[0].nodeValue + "</th>";    
+                    }
+                }
+                xmlData += "</tr><tr>";
+                count = xmlDoc.documentElement.getElementsByTagName("Row");
+                if(count.length==0 && header.length!=0) {
+                    alert("XML file contains NO radio stations");
+                }
+                for(j=0;j<count.length;j++) {
+                    content = xmlDoc.documentElement.getElementsByTagName("Row")[j];
+                    xlen = content.childNodes.length;
+                    y = content.firstChild;
+                    for (i = 0; i < xlen; i++) {
+                    if (y.nodeType == 1) {
+                    if(y.nodeName == "CallSign") {
+                         if(y.childNodes.length==0) {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                        } else {
+                            xmlData += "<td style=\"white-space: nowrap\">"+y.childNodes[0].nodeValue+ "</td>";     
+                        }
+                    } else if(y.nodeName == "Frequency") {
+                         if(y.childNodes.length==0) {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                        } else {
+                            xmlData += "<td style=\"white-space: nowrap\">"+y.childNodes[0].nodeValue+ "</td>";     
+                        }
+                    } else if(y.nodeName == "Location" || i==5) {
+                        if(i==5 && y.nodeName == "Format") {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                             if(y.childNodes.length==0) {
+                                 xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                            } else {
+                                xmlData += "<td style=\"white-space: nowrap\">"+y.childNodes[0].nodeValue+ "</td>";     
+                            }
+                        } else {
+                            city = y.getElementsByTagName("City");
+                            school = y.getElementsByTagName("School");
+
+                            if(city.length == 0 && school.length == 0) {
+                                xmlData += "<td></td>";
+                            } else {
+                            if(city.item(0) == null || city.item(0).childNodes.length == 0) {
+                                xmlData += "<td> ";
+                            } else {
+                                xmlData += "<td><ul><li style=\"width: 200px;\">"+city.item(0).childNodes[0].nodeValue+ "</li>";   
+                            }
+                            if(school.item(0) == null || school.item(0).childNodes.length == 0) {
+                                xmlData += "</td>";
+                            } else {
+                                xmlData += "<li style=\"width: 200px;\">"+school.item(0).childNodes[0].nodeValue+ "</li></ul></td>";
+                                }
+                            }
+                        }
+                    } else if(y.nodeName == "Format") {
+                         if(y.childNodes.length==0) {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                        } else {
+                            xmlData += "<td style=\"white-space: nowrap\">"+y.childNodes[0].nodeValue+ "</td>";     
+                        }
+                    } else if(y.nodeName == "HomePage") {
+                        if(y.childNodes.length==0) {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                        } else {
+                            xmlData += "<td style=\"white-space: nowrap\"><a href=\""+y.childNodes[0].nodeValue+ "\" target=\"_blank\">"+y.childNodes[0].nodeValue+"</a></td>";    
+                        }
+                    } else if(y.nodeName == "Logo") {
+                        if(y.childNodes.length==0) {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                        } else {
+                             xmlData += "<td style=\"white-space: nowrap\"><img src=\""+y.childNodes[0].nodeValue+ "\" style=\"height: 120px; width: 192px;\" alt=\"Not Valid\"></td>";     
+                        } 
+                    } else {
+                            xmlData += "<td style=\"white-space: nowrap\"> </td>";
+                    }
+                }
+                y = y.nextSibling;
+            }
+                xmlData += "</tr>";
+            }
+                xmlData += "</table>";
+                if(xmlDoc.documentElement.nodeName=="parsererror") {
+                    alert("Error in XML file");
+                } else {
+                    if(count.length!=0) {
+                        var w=1100;
+                        var h=500;
+                        var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+                        var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+                        var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ?    document.documentElement.clientWidth : screen.width;
+                        var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+                var myWindow = window.open("", "MsgWindow", 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+                        myWindow.document.body.innerHTML="";
+                        myWindow.document.write(xmlData);   
+                    }
+                }
+                } else {
+                    alert("Invalid Input");
+                }
+            }
+</script>
+<form>
+    <div align="center" style="margin-top: 150px;">
+            <b>Enter URL for Company List XML File</b><br /><br />
+            <input name="url" id="url" type="text"><br /><br />
+            <button type="button" onclick="loadXMLDoc()">Submit Query</button>
+    </div>
+</form>
+<noscript></noscript>
+</body>
+</html>
